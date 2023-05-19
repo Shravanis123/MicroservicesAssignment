@@ -2,11 +2,12 @@ package LearnMicroservices.employeeservice.service.Impl;
 
 import LearnMicroservices.employeeservice.dto.EmployeeDto;
 import LearnMicroservices.employeeservice.entity.Employee;
+import LearnMicroservices.employeeservice.exception.EmailNotFoundException;
+import LearnMicroservices.employeeservice.exception.EmployeeNotFoundException;
 import LearnMicroservices.employeeservice.mapper.EmployeeMapper;
 import LearnMicroservices.employeeservice.repository.EmployeeRepository;
 import LearnMicroservices.employeeservice.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.Mapper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,7 +36,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto getByEmail(String email) {
-        Employee employee=employeeRepository.findByEmail(email);
+        Employee employee=employeeRepository.findByEmail(email).orElseThrow(()->new EmailNotFoundException());
         EmployeeDto employeeDto=EmployeeMapper.MAPPER.mapToEmployeeDto(employee);
 //        EmployeeDto employeeDto=new EmployeeDto(
 //                employee.getId(),
@@ -48,7 +49,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto getById(Long id) {
-        Employee employee=employeeRepository.findById(id).orElse(null);
+        Employee employee=employeeRepository.findById(id).orElseThrow(()-> new EmployeeNotFoundException());
         EmployeeDto employeeDto=EmployeeMapper.MAPPER.mapToEmployeeDto(employee);
 //        EmployeeDto employeeDto=new EmployeeDto(
 //                employee.getId(),

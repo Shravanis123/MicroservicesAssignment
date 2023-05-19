@@ -2,6 +2,7 @@ package LearnMicroservices.departementservice.service.Impl;
 
 import LearnMicroservices.departementservice.dto.DepartmentDto;
 import LearnMicroservices.departementservice.entity.Department;
+import LearnMicroservices.departementservice.exception.DepartmentNotFountException;
 import LearnMicroservices.departementservice.mapper.DepartmentMapper;
 import LearnMicroservices.departementservice.repository.DepartmentRepository;
 import LearnMicroservices.departementservice.service.DepartmentService;
@@ -42,7 +43,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentDto getByDepartmentName(String departmentName) {
-      Department department= departmentRepository.findByDepartmentName(departmentName);
+      Department department= departmentRepository.findByDepartmentName(departmentName).orElseThrow(()->new DepartmentNotFountException());
         DepartmentDto departmentDto=DepartmentMapper.MAPPER.maptoDepartmentDto(department);
 //        DepartmentDto departmentDto=new DepartmentDto(
 //                department.getId(),
@@ -55,7 +56,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentDto getByDepartmentCode(String departmentCode) {
-        Department department=departmentRepository.findByDepartmentCode(departmentCode);
+        Department department=departmentRepository.findByDepartmentCode(departmentCode).orElseThrow(()->new DepartmentNotFountException());
         DepartmentDto departmentDto=DepartmentMapper.MAPPER.maptoDepartmentDto(department);
         return departmentDto;
     }
